@@ -6,12 +6,13 @@ text-decoration: underline;">Mongo DB Cheat Sheet<h1>
 - <a href="#1">Show databases</a>
 - <a href="#2">Switch databases</a>
 - <a href="#3">Show collections</a>
-- <a href="#4">Insert data</a>
-- <a href="#5">Simple data reading</a>
-- <a href="#6">Length of a collection</a>
-- <a href="#7">Comparasion, existence and logical operators</a>
-- <a href="#8">Data sorting and limiting</a>
-- <a href="#9">Querying nested arrays and documents</a>
+- <a href="#4">Inserting data (C)</a>
+- <a href="#5">Simple data reading (R)</a>
+- <a href="#6">Length of a collection (R)</a>
+- <a href="#7">Comparasion, existence and logical operators (R)</a>
+- <a href="#8">Data sorting and limiting (R)</a>
+- <a href="#9">Querying nested arrays and documents (R)</a>
+- <a href="#10">Updating data (U)</a>
 
 <h2 id="1" style="font-style: italic; color: lightgreen">Show databases</h2>
 
@@ -35,7 +36,7 @@ show collections
 ```
 <a href="#top" style="color: gray;"><sub>To the top</sub></a>
 
-<h2 id="4" style="font-style: italic; color: lightgreen">Insert data</h2>
+<h2 id="4" style="font-style: italic; color: lightgreen">Inserting data</h2>
 
 
 ```js
@@ -145,4 +146,38 @@ db.collection.find({hobbies: {$size: 2}}) // returns all documents, which have t
 
 db.collection.find({"adress.city": "Berlin"}) // this expression queries nested object "adress" and checks if it's property "city" equals to "Berlin".
 ```
+<a href="#top" style="color: gray;"><sub>To the top</sub></a>
+
+<h2 id="10" style="font-style: italic; color: lightgreen">Updating data</h2>
+
+```js
+db.collection.updateOne({}, {$set: {sex: "male"}}) // updates very first document in a collection and sets a new property "sex"
+
+db.collection.updateOne({}, {$rename: {"sex": "gender"}}) // updates very first document in a collection and renames a property "sex" into "gender"
+
+db.collection.updateOne({}, {$unset: {gender: 1}}) // updates very first document in a collection and removes a property "gender"
+
+db.collection.updateOne({first_name: "Serhii"}, {$inc: {age: 1}}) // takes a document with first_name = "Serhii" and increases age by 1 (+1)
+
+db.collection.updateOne({bank_pin: 9132, bank_number: 9987123817239713}, {$inc: {bank_account: -100}}) // takes a document with bank_pin = 9132 and bank_number = 9987123817239713 and increases by -100, namely decreases by 100 (-100)
+
+db.collection.updateOne({first_name: "Alexander"}, {$set: {phone_number: 082349872348}, $currentDate: {last_modified: true}}) // finds a document with first_name = "Alexander", sets a new field "phone_number" and creates one more field "last_modified", which contains date on which updated
+
+db.collection.updateOne({first_name: "Alexander", second_name: "Antonovic"}, {$push: {hobbies: "cycling"}}) // grabs a document, which has first_name = "Alexander" and second_name = "Antonovic", and pushes a new item "cycling" into "hobbies" array
+
+db.collection.updateOne({first_name: "Alexander", second_name: "Antonovic"}, {$pull: {hobbies: "reading"}}) // grabs a document, which has first_name = "Alexander" and second_name = "Antonovic", and removes item "reading" from "hobbies" array
+
+db.collection.updateOne({first_name: "Serhii"}, {$pop: {hobbies: 1}}) // removes last item from "hobbies" array in a document which has first_name = "Serhii"
+
+db.collection.updateOne({first_name: "Serhii"}, {$pop: {hobbies: -1}}) // removes first item from "hobbies" array in a document which has first_name = "Serhii"
+
+db.collection.updateOne({username: "Girl_0729", password: "ias89udsfsn"}, {$push: {products: {$each: ["prada dress XS", "Nike Air Force 1"]}}}) // finds a document with username = "Girl_0729" and password = "ias89udsfsn", and pushes multiple values into "products" array, namely "prada dress XS" and "Nike Air Force 1"
+
+db.collection.updateOne({username: "Girl_0729", password: "ias89udsfsn"}, {$pullAll: {products: ["prada dress XS", "Nike Air Force 1"]}}) // finds a document with username = "Girl_0729" and password = "ias89udsfsn", and removes "prada dress XS" and "Nike Air Force 1" from "products" array
+
+db.collection.updateOne({first_name = "Serhii", second_name: "Vyshtak"}, {$set: {"adress.street": "Hnata Yury", "adress.house": 17}}) // finds a document with first_name = "Serhii" and second_name: "Vyshtak", and changes values "street" and "house" in the nested document called "adress"
+
+db.collection.updateMany({age: {$gt: 18}}, {$set: {is_adult: true}}) // takes all the documents from a collection, which have age greater than 18 and updates "is_adult" property to true
+```
+
 <a href="#top" style="color: gray;"><sub>To the top</sub></a>
