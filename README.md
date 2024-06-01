@@ -13,6 +13,8 @@ text-decoration: underline;">Mongo DB Cheat Sheet<h1>
 - <a href="#8">Data sorting and limiting (R)</a>
 - <a href="#9">Querying nested arrays and documents (R)</a>
 - <a href="#10">Updating data (U)</a>
+- <a href="#11">Deleting documents (D)</a>
+- <a href="#12">Database and collection drop</a>
 
 <h2 id="1" style="font-style: italic; color: lightgreen">Show databases</h2>
 
@@ -178,6 +180,29 @@ db.collection.updateOne({username: "Girl_0729", password: "ias89udsfsn"}, {$pull
 db.collection.updateOne({first_name = "Serhii", second_name: "Vyshtak"}, {$set: {"adress.street": "Hnata Yury", "adress.house": 17}}) // finds a document with first_name = "Serhii" and second_name: "Vyshtak", and changes values "street" and "house" in the nested document called "adress"
 
 db.collection.updateMany({age: {$gt: 18}}, {$set: {is_adult: true}}) // takes all the documents from a collection, which have age greater than 18 and updates "is_adult" property to true
+```
+
+<a href="#top" style="color: gray;"><sub>To the top</sub></a>
+
+<h2 id="11" style="font-style: italic; color: lightgreen">Deleting documents</h2>
+
+```js
+db.collection.deleteOne({}) // deletes very first document in a collection
+
+db.collection.deleteOne({first_name: "Serhii", second_name: "Vyshtak"}) // deletes a document with first_name = "Serhii" and second_name = "Vyshtak"
+
+db.collection.deleteMany({}) // deletes all the documents from the collection
+
+db.collection.deleteMany({age: 27}) // deletes all documents, which have age = 27
+```
+
+<a href="#top" style="color: gray;"><sub>To the top</sub></a>
+
+<h2 id="12" style="font-style: italic; color: lightgreen">Database and collection drop</h2>
+
+```js
+db.collection.drop() // removes a collection
+db.dropDatabase() // removes a database
 ```
 
 <a href="#top" style="color: gray;"><sub>To the top</sub></a>
