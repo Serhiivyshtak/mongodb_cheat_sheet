@@ -15,6 +15,7 @@ text-decoration: underline;">Mongo DB Cheat Sheet<h1>
 - <a href="#10">Updating data (U)</a>
 - <a href="#11">Deleting documents (D)</a>
 - <a href="#12">Database and collection drop</a>
+- <a href="#13">Node.js setup and MongoDB connection</a>
 
 <h2 id="1" style="font-style: italic; color: lightgreen">Show databases</h2>
 
@@ -203,6 +204,36 @@ db.collection.deleteMany({age: 27}) // deletes all documents, which have age = 2
 ```js
 db.collection.drop() // removes a collection
 db.dropDatabase() // removes a database
+```
+
+<a href="#top" style="color: gray;"><sub>To the top</sub></a>
+
+<h2 id="13" style="font-style: italic; color: lightgreen">Node.js setup and MongoDB connection</h2>
+
+```js
+const http = require('http'); // importing http Node.js module
+const {MongoClient} = require('mongodb'); // importing Mongo client
+
+let db; // Setting a variable which we will use to make queries to the database
+
+const server = http.createServer((req, res) => {
+    // Here will be requests to the api handeled...
+});
+
+// Connecting to MongoDB with connection url
+MongoClient.connect('mongodb://localhost:27017/DATABASE_NAME')
+    .then(client => {
+        db = client.db(); // Signing the MongoDB interface to variable defined above
+
+        // Starting Node.js server
+        server.listen(3000, () => {
+            console.log('Server started on port 3000');
+        });
+
+    })
+    .catch(err => {
+        console.log('Database connection failed'); // Handling database connection error
+    });
 ```
 
 <a href="#top" style="color: gray;"><sub>To the top</sub></a>
